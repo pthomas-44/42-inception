@@ -17,10 +17,12 @@ FROM	debian:buster
 # Update and install process
 RUN		apt-get update -y && apt-get upgrade -y
 
-# Install nginx
-RUN		apt-get install -y nginx openssl
-#		&& rm -rf /etc/nginx/sites-enabled/default
-#COPY	./srcs/nginx.conf ./etc/nginx/sites-enabled/
+# Install nginx and openssl
+RUN		apt-get install -y nginx openssl	
+
+# Replace the default config
+RUN		rm -rf /etc/nginx/sites-available/default
+COPY	./conf/nginx.conf ./etc/nginx/sites-available/
 
 # Generate certificate
 RUN		openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj "/C=FR/ST=Auvergne-Rhône-Alpes/L=Lyon/emailAddress=pthomas@student.42lyon.fr" -keyout ./etc/ssl/certs/localhost.key -out ./etc/ssl/certs/localhost.crt
