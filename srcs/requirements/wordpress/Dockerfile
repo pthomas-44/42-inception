@@ -13,22 +13,16 @@
 FROM	debian:buster
 
 # SYSTEM UPDATE AND DEPENDENCIES
-RUN		apt-get update -y && apt-get upgrade -y && apt-get install tar
+RUN		apt-get update -y && apt-get upgrade -y && apt-get -y install tar
 
 # PHPMYADMIN
-RUN		apt-get install -y php8.0
-#php8.0-fpm php8.0-common php8.0-mysql php8.0-gmp php8.0-curl php8.0-intl php8.0-mbstring php8.0-xmlrpc php8.0-gd php8.0-xml php8.0-cli php8.0-zip
-#RUN		apt-get install -y php7.3 php7.3-fpm php7.3-mysql  php7.3-curl php7.3-gd php7.3-intl php7.3-xml php7.3-zip php7.3-imagick php7.3-apcu php7.3-mbstring php7.3-cli
-ADD		"https://files.phpmyadmin.net/phpMyAdmin/5.1.3/phpMyAdmin-5.1.3-all-languages.tar.gz" /tmp/phpmyadmin.tar.gz
-RUN		tar -xvf /tmp/phpmyadmin.tar.gz \
-    	&& mv /tmp/phpMyAdmin-5.0.4-all-languages /var/www/html/phpmyadmin \
-    	&& rm -f /tmp/phpmyadmin.tar.gz
- 
+RUN		apt-get install -y php-fpm php-mysql
+
 # WORDPRESS
 ADD		"https://wordpress.org/latest.tar.gz" /tmp/wordpress.tar.gz
-RUN		tar -xvf /tmp/wordpress.tar.gz \
-		&& mv wordpress ./var/www/html/ \
-		&& rm -f /tmp/wordpress.tar.gz
+RUN		mkdir -p /var/www /var/www/html
+RUN		tar -xvf /tmp/wordpress.tar.gz -C /var/www/html \
+&&		rm -f /tmp/wordpress.tar.gz
 
 # CONFIG
 
@@ -42,4 +36,4 @@ RUN		tar -xvf /tmp/wordpress.tar.gz \
 #		&& chown -R www-data:www-data /var/www/html/phpmyadmin
 
 
-#CMD		service php7.3-fpm start
+#CMD		["service", "php-fpm", "start;"]
