@@ -20,15 +20,15 @@ RUN		apt-get update -y && apt-get upgrade -y
 # Install nginx and openssl
 RUN		apt-get install -y nginx openssl	
 
-# Replace the default config
-RUN		rm -rf /etc/nginx/sites-available/default
-COPY	./conf/nginx.conf ./etc/nginx/sites-available/
+# Add my website config and html page
+COPY	./tools/eugene.html /var/www/html/.
+COPY	./conf/nginx.conf /etc/nginx/sites-available/pthomas.42.fr.conf
+RUN		ln -s /etc/nginx/sites-available/pthomas.42.fr.conf /etc/nginx/sites-enabled/pthomas.42.fr.conf
 
 # Generate certificate
 RUN		openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj "/C=FR/ST=Auvergne-Rhône-Alpes/L=Lyon/emailAddress=pthomas@student.42lyon.fr" -keyout ./etc/ssl/certs/localhost.key -out ./etc/ssl/certs/localhost.crt
 
+# Open port
 EXPOSE	443
-
-#CMD		service nginx start
 
 CMD ["nginx", "-g", "daemon off;"]
