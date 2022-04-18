@@ -11,5 +11,5 @@ RUN		apt-get install -y mariadb-server
 COPY	./tools/wordpress.sql /tmp
 RUN		service mysql start && mysql < /tmp/wordpress.sql
 
-#CMD		["service", "mysql", "start;"]
-CMD		mysqld
+# START
+CMD		["mysqld"]
