@@ -70,12 +70,13 @@ stop:
 
 #~~~~ Cleaning ~~~~#
 
-clean:
-			docker system prune -f --all
-fclean:		
+clean:		down
+
+fclean:
 			$(COMPOSE) down --volumes
-			docker system prune -f --all
-			
+			docker image prune -f
+			docker builder prune -f
+
 #~~~~ Misc ~~~~#
 
 volumes:
