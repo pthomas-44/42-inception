@@ -15,17 +15,11 @@ RUN		apt-get install -y mariadb-server
 
 # CREATE WORDRPRESS DATABASE
 RUN		service mysql start \
-&&		mysql -e "create database if not exists wordpress;\
-alter user 'root'@'localhost' identified by 'root44';\
-create user 'pthomas'@'localhost' identified by 'pthomas44';\
+&&		mysql -e "create database if not exists $MYSQL_DATABASE;\
+alter user 'root'@'localhost' identified by '$MYSQL_ROOT_PASSWORD';\
+create user '$MYSQL_USER'@'localhost' identified by '$MYSQL_PASSWORD';\
 flush privileges;"
-
 
 # START
 CMD		["mysqld"]
 
-#RUN		service mysql start \
-#&&		mysql -e "create database if not exists $MYSQL_DATABASE;\
-#alter user 'root'@'localhost' identified by '$MYSQL_ROOT_PASSWORD';\
-#create user '$MYSQL_USER'@'localhost' identified by '$MYSQL_PASSWORD';\
-#flush privileges;"
