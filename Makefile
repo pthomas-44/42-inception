@@ -30,6 +30,8 @@ COMPOSE		= docker-compose --project-directory=srcs -p $(NAME)
 
 all:		create
 
+re:			fclean create
+
 up:			build
 			$(COMPOSE) up --detach
 
@@ -117,4 +119,4 @@ eugene :
 			@ echo "                7____,,..--'      /          |"
 			@ echo "                                  \`---.__,--.'"
 								  
-.PHONY:		all up down build create ps exec start restart stop clean fclean eugene
+.PHONY:		all re up down build create ps exec start restart stop clean fclean eugene
