@@ -16,13 +16,69 @@
 
 #~~~~ Output ~~~~#
 
-NAME		=
+NAME		= inception
 
-#sudo chmod 666 /var/run/docker.sock
+#~~~~ DOCKER ~~~~#
+
+COMPOSE		= docker-compose --project-directory=srcs -p $(NAME)
 
 #========================================#
 #=============== TARGETS ================#
 #========================================#
+
+#~~~~ Main ~~~~#
+
+all:		create
+
+up:			build
+			$(COMPOSE) up --detach
+
+down:
+			$(COMPOSE) down
+
+#~~~~ Build ~~~~#
+
+build:		volumes
+			$(COMPOSE) build --parallel
+
+create:		build
+			$(COMPOSE) create
+
+#~~~~ Debug ~~~~#
+
+ps:
+			$(COMPOSE) ps --all
+
+exec:
+ifeq '$(CONTAINER)' ''
+	@echo "Usage: CONTAINER=<CONTAINER_NAME> make exec"
+else
+	$(COMPOSE) exec $(CONTAINER) /bin/bash
+endif
+
+#~~~~ Essantial ~~~~#
+
+start:
+			$(COMPOSE) start
+
+restart:
+			$(COMPOSE) restart
+stop:
+			$(COMPOSE) stop
+
+#~~~~ Cleaning ~~~~#
+
+clean:
+			docker system prune -f --all
+fclean:		
+			$(COMPOSE) down --volumes
+			docker system prune -f --all
+			
+#~~~~ Misc ~~~~#
+
+volumes:
+			@mkdir -p /home/$(USER)/data/site
+			@mkdir -p /home/$(USER)/data/db
 
 #~~~~ Eugene ~~~~#
 
@@ -61,4 +117,4 @@ eugene :
 			@ echo "                7____,,..--'      /          |"
 			@ echo "                                  \`---.__,--.'"
 								  
-.PHONY:		all clean fclean re eugene
+.PHONY:		all up down build create ps exec start restart stop clean fclean eugene
