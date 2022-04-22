@@ -8,13 +8,15 @@ services:
     image: nginx
     build:
       context: ./requirements/nginx
-    ports:
-      - "443:443"
+    volumes:
+      - site:/var/www/html
     networks:
       - inception
+    ports:
+      - "443:443"
+    restart: on-failure
     depends_on:
       - wordpress
-    restart: on-failure
 #    secrets:
 #      - server-certificate
 
@@ -27,17 +29,15 @@ services:
         - MYSQL_DATABASE=$MYSQL_DATABASE
         - MYSQL_USER=$MYSQL_USER
         - MYSQL_PASSWORD=$MYSQL_PASSWORD
-    env_file:
-      - .env
-#    volumes:
-#      - wp-site:/var/www/html
+    volumes:
+      - site:/var/www/html
     networks:
       - inception
+    #ports:
+    #  - "9000:9000"
+    restart: on-failure
     depends_on:
       - mariadb
-    restart: on-failure
-    #ports:
-    #  - "9000:443"
 
   mariadb:
     container_name: mariadb
@@ -49,22 +49,44 @@ services:
         - MYSQL_DATABASE=$MYSQL_DATABASE
         - MYSQL_USER=$MYSQL_USER
         - MYSQL_PASSWORD=$MYSQL_PASSWORD
-    env_file:
-      - .env
-#    volumes:
-#      - wp-db:/var/lib/mysql
+    volumes:
+      - db:/var/lib/mysql
     networks:
       - inception
-    restart: on-failure
     #ports:
     #  - "3306:3306"
+    restart: on-failure
+
+volumes:
+
+  db:
+    name: db
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/$USER/data/db
+      o: bind
+
+  site:
+    name: site
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/$USER/data/site
+      o: bind
 
 #volumes:
-#  wp-db:
-#  wp-site:
+#  mysql_data:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: /srv/docker/mysql-data
+#      o: bind
 
 networks:
-  inception: {}
+  inception:
+    name: inception
+    driver: bridge
 
 #hostname: pthomas
 #domainname: 42.fr
