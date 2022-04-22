@@ -3,6 +3,40 @@ name: inception
 
 services:
 
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    build:
+      context: ./requirements/mariadb
+      args:
+        - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+        - MYSQL_DATABASE=$MYSQL_DATABASE
+        - MYSQL_USER=$MYSQL_USER
+        - MYSQL_PASSWORD=$MYSQL_PASSWORD
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - inception
+    restart: on-failure
+
+  wordpress:
+    container_name: wordpress
+    image: wordpress
+    build:
+      context: ./requirements/wordpress
+      args:
+        - WORDPRESS_DB_NAME=$MYSQL_DATABASE
+        - WORDPRESS_DB_USER=$MYSQL_USER
+        - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
+        - WORDPRESS_DB_HOST=$MYSQL_HOST
+    volumes:
+      - site:/var/www/html
+    networks:
+      - inception
+    restart: on-failure
+    depends_on:
+      - mariadb
+
   nginx:
     container_name: nginx
     image: nginx
@@ -19,43 +53,6 @@ services:
       - wordpress
 #    secrets:
 #      - server-certificate
-
-  wordpress:
-    container_name: wordpress
-    image: wordpress
-    build:
-      context: ./requirements/wordpress
-      args:
-        - MYSQL_DATABASE=$MYSQL_DATABASE
-        - MYSQL_USER=$MYSQL_USER
-        - MYSQL_PASSWORD=$MYSQL_PASSWORD
-    volumes:
-      - site:/var/www/html
-    networks:
-      - inception
-    #ports:
-    #  - "9000:9000"
-    restart: on-failure
-    depends_on:
-      - mariadb
-
-  mariadb:
-    container_name: mariadb
-    image: mariadb
-    build:
-      context: ./requirements/mariadb
-      args:
-        - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-        - MYSQL_DATABASE=$MYSQL_DATABASE
-        - MYSQL_USER=$MYSQL_USER
-        - MYSQL_PASSWORD=$MYSQL_PASSWORD
-    volumes:
-      - db:/var/lib/mysql
-    networks:
-      - inception
-    #ports:
-    #  - "3306:3306"
-    restart: on-failure
 
 volumes:
 
@@ -75,6 +72,11 @@ volumes:
       device: /home/$USER/data/site
       o: bind
 
+networks:
+  inception:
+    name: inception
+    driver: bridge
+
 #volumes:
 #  mysql_data:
 #    driver: local
@@ -82,11 +84,6 @@ volumes:
 #      type: none
 #      device: /srv/docker/mysql-data
 #      o: bind
-
-networks:
-  inception:
-    name: inception
-    driver: bridge
 
 #hostname: pthomas
 #domainname: 42.fr
