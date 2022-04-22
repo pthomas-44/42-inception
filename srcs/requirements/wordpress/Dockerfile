@@ -19,9 +19,10 @@ ARG		MYSQL_PASSWORD
 # SYSTEM UPDATE AND DEPENDENCIES
 RUN		apt-get update -y && apt-get upgrade -y && apt-get install -y tar
 
-# PHPMYADMIN
+# PHP
 RUN		apt-get install -y php-fpm php-mysql \
-&&		mkdir -p /run/php
+&&	 	service php7.3-fpm start && service php7.3-fpm stop \
+&&		sed -i "s/\/run\/php\/php7.3-fpm.sock/wordpress:9000/" /etc/php/7.3/fpm/pool.d/www.conf
 
 # WORDPRESS
 ADD		"https://wordpress.org/latest.tar.gz" /tmp/wordpress.tar.gz
@@ -33,9 +34,11 @@ RUN		tar -xvf /tmp/wordpress.tar.gz -C /var/www/html \
 RUN		cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php \
 &&		sed -i "s/database_name_here/$MYSQL_DATABASE/" /var/www/html/wordpress/wp-config.php \
 &&		sed -i "s/username_here/$MYSQL_USER/" /var/www/html/wordpress/wp-config.php \
-&&		sed -i "s/password_here/$MYSQL_PASSWORD/" /var/www/html/wordpress/wp-config.php && touch AUSECOURSMONDIEU
+&&		sed -i "s/password_here/$MYSQL_PASSWORD/" /var/www/html/wordpress/wp-config.php \
+&&		sed -i "s/localhost/mariadb:3306/" /var/www/html/wordpress/wp-config.php
 
-#RUN		chown -R www-data:www-data /var/www/html/wordpress
+# PORTS
+EXPOSE	9000
 
 # START
 CMD		["php-fpm7.3", "-F"]
