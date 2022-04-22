@@ -73,9 +73,8 @@ stop:
 clean:		down
 
 fclean:
-			$(COMPOSE) down --volumes
-			docker image prune -f
-			docker builder prune -f
+			docker-compose --project-directory=srcs down --rmi all --volumes
+			sudo rm -rf /home/$(USER)/data/*
 
 #~~~~ Misc ~~~~#
 
