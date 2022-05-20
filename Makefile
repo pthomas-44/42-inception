@@ -6,7 +6,7 @@
 #    By: pthomas <pthomas@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/12 15:24:38 by pthomas           #+#    #+#              #
-#    Updated: 2022/05/20 14:14:47 by pthomas          ###   ########lyon.fr    #
+#    Updated: 2022/05/20 16:47:35 by pthomas          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ NAME		= inception
 #~~~~ DOCKER ~~~~#
 
 COMPOSE		= docker-compose --project-directory=srcs -p $(NAME)
+BONUS_FLAG	= --profile bonus
 
 #========================================#
 #=============== TARGETS ================#
@@ -30,7 +31,9 @@ COMPOSE		= docker-compose --project-directory=srcs -p $(NAME)
 
 all:		create
 
-re:			fclean create
+re:			fclean all
+
+bonus:		COMPOSE += $(BONUS_FLAG) all
 
 up:			build
 			$(COMPOSE) up --detach
@@ -70,7 +73,7 @@ stop:
 
 #~~~~ Cleaning ~~~~#
 
-clean:		down
+clean:		docker-compose --project-directory=srcs down --rmi all
 
 fclean:
 			docker-compose --project-directory=srcs down --rmi all --volumes
