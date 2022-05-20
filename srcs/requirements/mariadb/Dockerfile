@@ -1,3 +1,14 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Dockerfile                                         :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: pthomas <pthomas@student.42lyon.fr>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/05/20 14:43:46 by pthomas           #+#    #+#              #
+#    Updated: 2022/05/20 14:43:48 by pthomas          ###   ########lyon.fr    #
+#                                                                              #
+# **************************************************************************** #
 
 FROM	debian:buster
 
@@ -10,7 +21,7 @@ ARG		MYSQL_PASSWORD
 # SYSTEM UPDATE AND DEPENDENCIES
 RUN		apt-get update -y && apt upgrade -y
 
-# MARIADB
+# MARIADBñ
 RUN		apt-get install -y mariadb-server mariadb-client
 
 # CREATE WORDRPRESS DATABASE
