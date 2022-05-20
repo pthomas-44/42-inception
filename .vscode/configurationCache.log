@@ -1,0 +1,1 @@
+{"buildTargets":["all","build","clean","create","down","eugene","exec","fclean","ps","re","restart","start","stop","up","volumes"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}

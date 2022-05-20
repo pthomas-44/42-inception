@@ -6,7 +6,7 @@
 #    By: pthomas <pthomas@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/12 15:24:38 by pthomas           #+#    #+#              #
-#    Updated: 2022/04/08 14:01:06 by pthomas          ###   ########lyon.fr    #
+#    Updated: 2022/05/20 14:14:47 by pthomas          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ exec:
 ifeq '$(CONTAINER)' ''
 	@echo "Usage: CONTAINER=<CONTAINER_NAME> make exec"
 else
-	$(COMPOSE) exec $(CONTAINER) /bin/bash
+	$(COMPOSE) exec $(CONTAINER) /bin/sh
 endif
 
 #~~~~ Essantial ~~~~#

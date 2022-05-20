@@ -9,10 +9,15 @@ services:
     build:
       context: ./requirements/mariadb
       args:
-        - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-        - MYSQL_DATABASE=$MYSQL_DATABASE
-        - MYSQL_USER=$MYSQL_USER
-        - MYSQL_PASSWORD=$MYSQL_PASSWORD
+        - MYSQL_ROOT_PASSWORD
+        - MYSQL_DATABASE
+        - MYSQL_USER
+        - MYSQL_PASSWORD
+      # args:
+      #   - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      #   - MYSQL_DATABASE=$MYSQL_DATABASE
+      #   - MYSQL_USER=$MYSQL_USER
+      #   - MYSQL_PASSWORD=$MYSQL_PASSWORD
     volumes:
       - db:/var/lib/mysql
     networks:
@@ -24,11 +29,13 @@ services:
     image: wordpress
     build:
       context: ./requirements/wordpress
-      args:
-        - WORDPRESS_DB_NAME=$MYSQL_DATABASE
-        - WORDPRESS_DB_USER=$MYSQL_USER
-        - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
-        - WORDPRESS_DB_HOST=$MYSQL_HOST
+      env_file:
+        - .env
+      # args:
+      #   - WORDPRESS_DB_NAME=$MYSQL_DATABASE
+      #   - WORDPRESS_DB_USER=$MYSQL_USER
+      #   - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
+      #   - WORDPRESS_DB_HOST=$MYSQL_HOST
     volumes:
       - site:/var/www/html
     networks:
@@ -51,11 +58,11 @@ services:
     restart: on-failure
     depends_on:
       - wordpress
-#    secrets:
-#      - server-certificate
+    secrets:
+      - ssl-certificate
+      - ssl-key
 
 volumes:
-
   db:
     name: db
     driver: local
@@ -77,22 +84,8 @@ networks:
     name: inception
     driver: bridge
 
-#volumes:
-#  mysql_data:
-#    driver: local
-#    driver_opts:
-#      type: none
-#      device: /srv/docker/mysql-data
-#      o: bind
-
-#hostname: pthomas
-#domainname: 42.fr
-#init:
-
-#    driver: flocker
-#    driver_opts:
-#      size: "10GiB"
-
-#secrets:
-#  server-certificate:
-#    external: true
+secrets:
+    ssl-certificate:
+      file: ./conf/inception_ssl.crt
+    ssl-key:
+      file: ./conf/inception_ssl.key

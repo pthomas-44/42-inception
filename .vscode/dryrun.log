@@ -1,0 +1,8 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/dev/42/common_core/inception'
+mkdir -p /home/dev/data/site
+mkdir -p /home/dev/data/db
+docker-compose --project-directory=srcs -p inception build --parallel
+docker-compose --project-directory=srcs -p inception create
+make: Leaving directory '/home/dev/42/common_core/inception'
+ 
