@@ -6,7 +6,7 @@
 #    By: pthomas <pthomas@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/15 11:51:05 by pthomas           #+#    #+#              #
-#    Updated: 2022/05/20 14:14:39 by pthomas          ###   ########lyon.fr    #
+#    Updated: 2022/05/20 16:31:37 by pthomas          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,10 +17,11 @@ ARG		MYSQL_USER
 ARG		MYSQL_PASSWORD
 
 # SYSTEM UPDATE AND DEPENDENCIES
-RUN		apt-get update -y && apt-get upgrade -y && apt-get install -y tar
+RUN		apt-get update -y && apt-get upgrade -y && apt-get install -y tar wget
+# maybe replace by zip or remove if wp core download work
 
 # PHP
-RUN		apt-get install -y php-fpm php-mysql \
+RUN		apt-get install -y php-fpm php-mysql php-redis \
 &&	 	service php7.3-fpm start && service php7.3-fpm stop \
 &&		sed -i "s/\/run\/php\/php7.3-fpm.sock/wordpress:9000/" /etc/php/7.3/fpm/pool.d/www.conf
 
