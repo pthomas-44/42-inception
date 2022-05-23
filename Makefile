@@ -33,7 +33,8 @@ all:		create
 
 re:			fclean all
 
-bonus:		COMPOSE += $(BONUS_FLAG) all
+bonus:		COMPOSE += $(BONUS_FLAG)
+bonus:		up
 
 up:			build
 			$(COMPOSE) up --detach
@@ -58,7 +59,7 @@ exec:
 ifeq '$(CONTAINER)' ''
 	@echo "Usage: CONTAINER=<CONTAINER_NAME> make exec"
 else
-	$(COMPOSE) exec $(CONTAINER) /bin/sh
+	$(COMPOSE) exec $(CONTAINER) /bin/bash
 endif
 
 #~~~~ Essantial ~~~~#
@@ -73,10 +74,10 @@ stop:
 
 #~~~~ Cleaning ~~~~#
 
-clean:		docker-compose --project-directory=srcs down --rmi all
+clean:		docker-compose --project-directory=srcs --profile bonus down --rmi all
 
 fclean:
-			docker-compose --project-directory=srcs down --rmi all --volumes
+			docker-compose --project-directory=srcs --profile bonus down --rmi all --volumes
 			sudo rm -rf /home/$(USER)/data/*
 			docker volume rm wp-db wp-site
 

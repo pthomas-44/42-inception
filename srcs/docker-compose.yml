@@ -13,11 +13,6 @@ services:
         - MYSQL_DATABASE
         - MYSQL_USER
         - MYSQL_PASSWORD
-      # args:
-      #   - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-      #   - MYSQL_DATABASE=$MYSQL_DATABASE
-      #   - MYSQL_USER=$MYSQL_USER
-      #   - MYSQL_PASSWORD=$MYSQL_PASSWORD
     volumes:
       - db:/var/lib/mysql
     networks:
@@ -29,13 +24,13 @@ services:
     image: wordpress
     build:
       context: ./requirements/wordpress
-      env_file:
-        - .env
-      # args:
-      #   - WORDPRESS_DB_NAME=$MYSQL_DATABASE
-      #   - WORDPRESS_DB_USER=$MYSQL_USER
-      #   - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
-      #   - WORDPRESS_DB_HOST=$MYSQL_HOST
+      args:
+        - MYSQL_DATABASE
+        - MYSQL_USER
+        - MYSQL_PASSWORD
+        - MYSQL_HOST
+    env_file:
+      - .env
     volumes:
       - site:/var/www/html
     networks:
@@ -51,6 +46,8 @@ services:
         - bonus
       build:
         context: ./requirements/bonus/redis
+      environment:
+        - DOMAIN_NAME
       volumes:
         - site:/var/www/html
       networks:
@@ -74,11 +71,8 @@ services:
     depends_on:
       - wordpress
     secrets:
-      - ssl-certificate
-      - ssl-key
-
-profiles:
-  - bonus
+      - inception_ssl.crt
+      - inception_ssl.key
 
 volumes:
   db:
@@ -103,7 +97,7 @@ networks:
     driver: bridge
 
 secrets:
-    ssl-certificate:
-      file: ./conf/inception_ssl.crt
-    ssl-key:
-      file: ./conf/inception_ssl.key
+    inception_ssl.crt:
+      file: ./requirements/nginx/conf/inception_ssl.crt
+    inception_ssl.key:
+      file: ./requirements/nginx/conf/inception_ssl.key

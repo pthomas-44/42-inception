@@ -35,3 +35,4 @@ EXPOSE	443
 
 # START
 ENTRYPOINT	["nginx", "-g", "daemon off;"]
+# ENTRYPOINT	["tail", "-f"]
