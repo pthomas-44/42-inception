@@ -53,6 +53,9 @@ RUN		cd /var/www/html/wordpress \
 &&		mv my-wp-config.php wp-config.php \
 &&		unset start end
 
+# BONUS STATIC WEBSITE
+COPY	./tools/eugene.html /var/www/html/wordpress
+
 # PORTS
 EXPOSE	9000
 
