@@ -12,18 +12,28 @@
 
 FROM	debian:buster
 
+ARG		WP_ADMIN
+ARG		WP_ADMIN_PASSWORD
+
 # SYSTEM UPDATE AND DEPENDENCIES
 RUN		apt-get update -y && apt-get upgrade -y
 
 # VSFTPD
-RUN		apt-get install -y vsftpd
+RUN		apt-get install -y vsftpd ftp
 
 # CONFIG
 COPY ./conf/vsftpd.conf /etc
+RUN		useradd -d /var/www/html $WP_ADMIN \
+&&		echo "$WP_ADMIN":"$WP_ADMIN_PASSWORD" | chpasswd \
+&&		usermod -aG root "$WP_ADMIN" \
+&&		usermod --shell /bin/bash "$WP_ADMIN" \
+&&		echo "$WP_ADMIN" | tee -a /etc/vsftpd.chroot_list
+# &&		chown -R pthomas: /var/www/html
 
 # PORTS
 EXPOSE	20
 EXPOSE	21
 
 # START
-ENTRYPOINT	["tail", "-f"]
+COPY	./tools/entrypoint.sh /tmp
+ENTRYPOINT	["sh", "/tmp/entrypoint.sh"]

@@ -46,6 +46,9 @@ services:
       - bonus
     build:
       context: ./requirements/bonus/ftp-serv
+      args:
+        - WP_ADMIN
+        - WP_ADMIN_PASSWORD
     volumes:
       - site:/var/www/html
     networks:
