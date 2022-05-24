@@ -114,15 +114,6 @@ services:
       - wordpress
       - mariadb
 
-  portsentry:
-    container_name: portsentry
-    image: portsentry
-    build:
-      context: ./requirements/bonus/portsentry
-    networks:
-      - inception
-    restart: on-failure
-
   fail2ban:
     container_name: fail2ban
     image: fail2ban
