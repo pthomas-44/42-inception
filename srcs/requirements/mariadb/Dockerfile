@@ -12,7 +12,6 @@
 
 FROM	debian:buster
 
-# RETRIEVE DB CREDS FROM ENV
 ARG		MYSQL_ROOT_PASSWORD
 ARG		MYSQL_DATABASE
 ARG		MYSQL_USER
@@ -22,7 +21,7 @@ ARG		MYSQL_PASSWORD
 RUN		apt-get update -y && apt upgrade -y
 
 # MARIADBñ
-RUN		apt-get install -y mariadb-server mariadb-client
+RUN		apt-get install -y mariadb-server
 
 # CREATE WORDRPRESS DATABASE
 RUN		service mysql start \

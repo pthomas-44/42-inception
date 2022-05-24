@@ -39,6 +39,22 @@ services:
     depends_on:
       - mariadb
 
+  adminer:
+    container_name: adminer
+    image: adminer
+    profiles:
+      - bonus
+    build:
+      context: ./requirements/bonus/adminer
+    volumes:
+      - site:/var/www/html
+    networks:
+      - inception
+    restart: on-failure
+    depends_on:
+      - wordpress
+      - mariadb
+
   ftp-serv:
     container_name: ftp-serv
     image: ftp-serv
@@ -70,7 +86,6 @@ services:
       context: ./requirements/bonus/redis
     environment:
       - DOMAIN_NAME
-      - REDIS_PASSWORD
     volumes:
       - site:/var/www/html
     networks:
@@ -94,6 +109,7 @@ services:
     restart: on-failure
     depends_on:
       - wordpress
+      - adminer
     secrets:
       - inception_ssl.crt
       - inception_ssl.key
@@ -125,3 +141,6 @@ secrets:
       file: ./requirements/nginx/conf/inception_ssl.crt
     inception_ssl.key:
       file: ./requirements/nginx/conf/inception_ssl.key
+
+# fail to ban
+# port entry

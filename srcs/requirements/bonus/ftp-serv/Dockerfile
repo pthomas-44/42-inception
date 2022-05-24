@@ -22,13 +22,13 @@ RUN		apt-get update -y && apt-get upgrade -y
 RUN		apt-get install -y vsftpd ftp
 
 # CONFIG
-COPY ./conf/vsftpd.conf /etc
+RUN		mkdir -p /var/run/vsftpd/empty
+COPY	./conf/vsftpd.conf /etc
 RUN		useradd -d /var/www/html $WP_ADMIN \
 &&		echo "$WP_ADMIN":"$WP_ADMIN_PASSWORD" | chpasswd \
 &&		usermod -aG root "$WP_ADMIN" \
 &&		usermod --shell /bin/bash "$WP_ADMIN" \
 &&		echo "$WP_ADMIN" | tee -a /etc/vsftpd.chroot_list
-# &&		chown -R pthomas: /var/www/html
 
 # PORTS
 EXPOSE	20
