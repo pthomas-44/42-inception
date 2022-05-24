@@ -39,24 +39,43 @@ services:
     depends_on:
       - mariadb
 
+  ftp-serv:
+    container_name: ftp-serv
+    image: ftp-serv
+    profiles:
+      - bonus
+    build:
+      context: ./requirements/bonus/ftp-serv
+    volumes:
+      - site:/var/www/html
+    networks:
+      - inception
+    restart: on-failure
+    depends_on:
+      - wordpress
+      - mariadb
+    secrets:
+      - inception_ssl.crt
+      - inception_ssl.key
+
   redis:
-      container_name: redis
-      image: redis
-      profiles:
-        - bonus
-      build:
-        context: ./requirements/bonus/redis
-      environment:
-        - DOMAIN_NAME
-        - REDIS_PASSWORD
-      volumes:
-        - site:/var/www/html
-      networks:
-        - inception
-      restart: on-failure
-      depends_on:
-        - wordpress
-        - mariadb
+    container_name: redis
+    image: redis
+    profiles:
+      - bonus
+    build:
+      context: ./requirements/bonus/redis
+    environment:
+      - DOMAIN_NAME
+      - REDIS_PASSWORD
+    volumes:
+      - site:/var/www/html
+    networks:
+      - inception
+    restart: on-failure
+    depends_on:
+      - wordpress
+      - mariadb
 
   nginx:
     container_name: nginx
