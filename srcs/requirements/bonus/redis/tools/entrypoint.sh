@@ -3,6 +3,10 @@
 
 # REDIS CONFIG
 cd /var/www/html/wordpress
+while ! wp core is-installed --allow-root
+do
+sleep 1
+done
 wp --allow-root config set WP_CACHE_KEY_SALT "$DOMAIN_NAME"
 wp --allow-root config set WP_CACHE "true"
 wp --allow-root config set WP_REDIS_HOST "redis"
