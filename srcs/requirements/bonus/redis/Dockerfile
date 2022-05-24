@@ -18,10 +18,6 @@ RUN		apt-get update -y && apt-get upgrade -y && apt-get install -y php-fpm php-m
 # REDIS
 RUN		apt-get install -y redis-server
 
-# CONFIG
-RUN		redis-cli config set maxmemory 256mb \
-&&		redis-cli config set maxmemory-policy allkeys-lfu
-
 # WP CLI
 ADD		https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar /usr/local/bin/wp
 RUN		chmod +x /usr/local/bin/wp

@@ -39,6 +39,19 @@ RUN		cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-
 &&		sed -i "s/password_here/$MYSQL_PASSWORD/" /var/www/html/wordpress/wp-config.php \
 &&		sed -i "s/localhost/$MYSQL_HOST/" /var/www/html/wordpress/wp-config.php
 
+RUN		cd /var/www/html/wordpress \
+&&		touch my-wp-config.php \
+&&		wget -c https://api.wordpress.org/secret-key/1.1/salt/ -O ./salt.txt \
+&&		start=`expr \`< wp-config.php grep -n -m 1 "AUTH_KEY" | cut -d : -f 1\` - 1` \
+&&		end=`expr \`< wp-config.php wc -l\` - \`< wp-config.php grep -n -m 1 "NONCE_SALT" | cut -d : -f 1\`` \
+&&		head -$start wp-config.php > my-wp-config.php \
+&&		cat salt.txt >> my-wp-config.php \
+&&		tail -$end wp-config.php >> my-wp-config.php \
+&&		rm wp-config.php \
+&&		mv my-wp-config.php wp-config.php \
+&&		rm salt.txt \
+&&		unset start end
+
 # PORTS
 EXPOSE	9000
 

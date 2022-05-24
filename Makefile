@@ -79,7 +79,6 @@ clean:		docker-compose --project-directory=srcs --profile bonus down --rmi all
 fclean:
 			docker-compose --project-directory=srcs --profile bonus down --rmi all --volumes
 			sudo rm -rf /home/$(USER)/data/*
-			docker volume rm wp-db wp-site
 
 #~~~~ Misc ~~~~#
 
