@@ -6,7 +6,7 @@
 #    By: pthomas <pthomas@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/15 11:51:05 by pthomas           #+#    #+#              #
-#    Updated: 2022/05/20 16:31:37 by pthomas          ###   ########lyon.fr    #
+#    Updated: 2022/05/25 10:22:18 by pthomas          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,7 @@ RUN		cd /var/www/html/wordpress \
 &&		unset start end
 
 # BONUS STATIC WEBSITE
-COPY	./tools/eugene.html /var/www/html/wordpress
+COPY	./tools/eugene /var/www/html/wordpress/eugene
 
 # PORTS
 EXPOSE	9000
