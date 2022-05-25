@@ -6,7 +6,7 @@
 #    By: pthomas <pthomas@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/12 15:24:38 by pthomas           #+#    #+#              #
-#    Updated: 2022/05/20 16:47:35 by pthomas          ###   ########lyon.fr    #
+#    Updated: 2022/05/25 12:28:48 by pthomas          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ BONUS_FLAG	= --profile bonus
 
 #~~~~ Main ~~~~#
 
-all:		create
+all:		up
 
 re:			fclean all
 
@@ -74,10 +74,11 @@ stop:
 
 #~~~~ Cleaning ~~~~#
 
-clean:		docker-compose --project-directory=srcs --profile bonus down --rmi all
+clean:
+			docker-compose --project-directory=srcs $(BONUS_FLAG) down --rmi all
 
 fclean:
-			docker-compose --project-directory=srcs --profile bonus down --rmi all --volumes
+			docker-compose --project-directory=srcs $(BONUS_FLAG) down --rmi all --volumes
 			sudo rm -rf /home/$(USER)/data/*
 
 #~~~~ Misc ~~~~#
@@ -123,4 +124,4 @@ eugene :
 			@ echo "                7____,,..--'      /          |"
 			@ echo "                                  \`---.__,--.'"
 								  
-.PHONY:		all re up down build create ps exec start restart stop clean fclean eugene
+.PHONY:		all bonus re up down build create ps exec start restart stop clean fclean eugene
