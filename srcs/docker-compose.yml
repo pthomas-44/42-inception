@@ -117,6 +117,8 @@ services:
   fail2ban:
     container_name: fail2ban
     image: fail2ban
+    profiles:
+      - bonus
     build:
       context: ./requirements/bonus/fail2ban
     networks:
