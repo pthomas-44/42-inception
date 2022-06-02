@@ -13,6 +13,7 @@ services:
         - MYSQL_DATABASE
         - MYSQL_USER
         - MYSQL_PASSWORD
+    init: true
     volumes:
       - db:/var/lib/mysql
     networks:
@@ -44,6 +45,7 @@ services:
     image: nginx
     build:
       context: ./requirements/nginx
+    init: true
     volumes:
       - site:/var/www/html
     networks:
@@ -65,6 +67,7 @@ services:
       - bonus
     build:
       context: ./requirements/bonus/adminer
+    init: true
     volumes:
       - site:/var/www/html
     networks:
@@ -84,6 +87,7 @@ services:
       args:
         - WP_ADMIN
         - WP_ADMIN_PASSWORD
+    init: true
     volumes:
       - site:/var/www/html
     networks:
@@ -105,6 +109,7 @@ services:
       context: ./requirements/bonus/redis
     environment:
       - DOMAIN_NAME
+    init: true
     volumes:
       - site:/var/www/html
     networks:
@@ -119,6 +124,7 @@ services:
     image: fail2ban
     profiles:
       - bonus
+    init: true
     build:
       context: ./requirements/bonus/fail2ban
     networks:
